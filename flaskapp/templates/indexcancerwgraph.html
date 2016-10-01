@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+ * A Design by GraphBerry
+ * Author: GraphBerry
+ * Author URL: http://graphberry.com
+ * License: http://graphberry.com/pages/license
+-->
+<html lang="en-us">
+<head>
+  <script type="text/javascript" src="http://www.matthewtheisen.com/static/plotlygraph.js"> </script>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Health Modeling</title>
+      <style>
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+  </style>
+
+  <style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-yw4l{vertical-align:top}
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+
+	<!-- Load fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+
+	<!-- Load css styles -->
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/font-awesome.css" />
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/style2.css" />
+
+</head>
+
+
+<body>
+	<div class="jumbotron home home-fullscreen" id="home">
+		<div class="container">
+			<div class="header-info">
+				<h1>Predictive Health Modeling</h1>
+				<p>Builds a predictive model<br> of cancer survival
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-- Services section start -->
+<div class="container" data-html="true">  
+  <div class="row"
+ id="ca4830cd-47ec-4659-841b-1fa55575aa3f" style="height: 200%; width: 85%;" class="plotly-graph-div">
+  </div>
+</div>
+
+
+<script type="text/javascript">
+window.PLOTLYENV=window.PLOTLYENV || {};window.PLOTLYENV.BASE_URL="https://plot.ly";Plotly.newPlot("ca4830cd-47ec-4659-841b-1fa55575aa3f", [{"marker": {"color": "#6078F0", "size": 10}, "y": [4, 1, 3, 7], "type": "scatter", "mode": "markers", "x": [1, 2, 3, 4]}, {"y": [1, 2, 3, 4], "x": [1, 2, 3, 4], "line": {"color": "#000000", "width": 1.5}, "type": "scatter", "mode": "lines"}], {"yaxis": {"title": "yyy"}, "xaxis": {"title": "xxx"}, "title": "model loading"}, {"linkText": "Export to plot.ly", "showLink": true})
+</script>
+
+<script type="text/javascript">window.removeEventListener("resize");window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("ca4830cd-47ec-4659-841b-1fa55575aa3f"));});
+</script>
+
+<div class="container" data-html="true">
+  <div class="row">
+    <button onclick="submit()">Submit</button>
+    <br>
+  </div>
+
+  <div class="row">
+     <div class="col-md-4"><p><h2>    
+      <input type="checkbox" name="cyt" value="categ1" onclick="cyto('cytology')">Cytology<br></h2>
+      <input type="checkbox" name="cytology" value="blast" checked>Blast Percent<br>
+      <input type="checkbox" name="cytology" value="BMblast" checked>Bone Marrow Blast Percent<br>
+      <input type="checkbox" name="cytology" value="promyelo" checked>Bone Marrow Promyelocyte Percent<br>
+      <input type="checkbox" name="cytology" value="myelo" checked>Bone Marrow Myelocyte Percent<br>
+      <input type="checkbox" name="cytology" value="metamyelo" checked>Bone Marrow Metamyelocyte Percent<br>
+      <input type="checkbox" name="cytology" value="band" checked>Bone Marrow Band Percent<br>
+      <input type="checkbox" name="cytology" value="neutro" checked>Bone Marrow Neutrophil Percent<br>
+      <input type="checkbox" name="cytology" value="eosino" checked>Bone Marrow Eosinophil Percent<br>
+      <input type="checkbox" name="cytology" value="baso" checked>Bone Marrow Basophil Percent<br>
+      <input type="checkbox" name="cytology" value="lympho" checked>Bone Marrow Lymphocyte Percent<br>
+      <input type="checkbox" name="cytology" value="mono" checked>Bone Marrow Monocyte Percent<br>
+      <input type="checkbox" name="cytology" value="prolympho" checked>Bone Marrow Prolymphocyte Percent<br>
+      <input type="checkbox" name="cytology" value="promono" checked>Bone Marrow Promonocyte Percent<br>
+      <input type="checkbox" name="cytology" value="ablympho" checked>Abnormal Lymphocyte Percent<br>
+  </p></div>
+    <div class="col-md-4"><p><h2>
+      <input type="checkbox" name="mut" value="categ2" onclick="cyto('mutation')">Mutations<br></h2>
+      <input type="checkbox" name="mutation" value="PML_RAR" checked>PML-RAR<br>
+      <input type="checkbox" name="mutation" value="FLT3" checked>FLT3<br>
+      <input type="checkbox" name="mutation" value="IDH1_R132" checked>IDH1 R132<br>
+      <input type="checkbox" name="mutation" value="IDH1_R140" checked>IDH1 R140<br>
+      <input type="checkbox" name="mutation" value="IDH1_R172" checked>IDH1 R172<br>
+      <input type="checkbox" name="mutation" value="RAS" checked>Activating RAS<br>
+      <input type="checkbox" name="mutation" value="NPMc" checked>NPMc<br>
+    </p></div>
+    <div class="col-md-4"><p><h2>
+      <input type="checkbox" name="oth" value="categ3" onclick="cyto('other')">Other<br></h2>
+      <input type="checkbox" name="other" value="year" checked>Year Diagnosed<br>
+      <input type="checkbox" name="other" value="age" checked>Age Diagnosed<br>
+      <input type="checkbox" name="other" value="risk" checked>Risk Category<br>
+    </p></div>
+  </div>
+  <div class="row">
+    <button onclick="submit()">Submit</button>
+    <br><br>
+  </div>
+</div>
+
+<div class="container" data-html="true">
+  <div class="row">
+    <div class="col-md-12">
+          <p id="Description">This web application builds a predictive model of cancer survival based on user-selected features.</p> <p>Select features desired for the model using the checkboxes. Click Submit to generate the model and display predictions. Data for this web application came from <a href="http://cancergenome.nih.gov/">The Cancer Genome Atlas</a> for Acute Myeloid Leukemia. Data was extracted from XML files and stored in a <a href="http://postgresql.org">Postgres</a> database on this server. This python web application is powered by <a href="http://flask.pocoo.org">Flask</a>. The numpy and sklearn packages are used to handle the data and perform linear regression. The psycopg2 package is used to access the database. Graph generated with <a href="https://plot.ly/">plotly</a>. </p>
+          <p> The process of developing this application is described on <a href="https://beyonddatascience.wordpress.com/traversing-tcga/">Matthew Theisen's Data Blog.</a> </p>
+    </div>
+  </div>
+</div>
+
+
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/solcalcfuncs.js"></script>
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/LineGraphingFunctions.js"></script>
+
+
+    <script>
+      function cyto(namer) {
+        var cytlist = document.getElementsByName(namer)
+        var leadcheckbox = document.getElementsByName(namer.slice(0,3))
+        
+        for (i=0; i<cytlist.length; i++) {
+            cytlist[i].checked = leadcheckbox[0].checked
+        }
+      };
+
+      function submit() {
+      var catlist = ['cytology','mutation','other']
+      var colNames = []
+        for (i=0; i<=catlist.length; i++) {
+          cytlist = document.getElementsByName(catlist[i])
+          for (j=0; j<cytlist.length; j++) {
+            if (cytlist[j].checked == true) {
+              colNames.push(cytlist[j].value)
+            }
+          }
+        }
+        console.log(colNames)
+        $.getJSON('/appy/_get_predictions', {
+          colnames: colNames
+        }, function(data) {
+          Death=data[0]
+          Pred=data[1]
+          window.PLOTLYENV=window.PLOTLYENV || {};window.PLOTLYENV.BASE_URL="https://plot.ly";Plotly.newPlot("ca4830cd-47ec-4659-841b-1fa55575aa3f", [{"marker": {"color": "#6078F0", "size": 10}, "y": Death, "type": "scatter", "mode": "markers", "x": Pred}, {"y": [1, 2, 3, 800], "x": [1, 2, 3, 800], "line": {"color": "#000000", "width": 1.5}, "type": "scatter", "mode": "lines"}], {"yaxis": {"title": "Actual Survival (Days)"}, "xaxis": {"title": "Survival Prediction (Days)"}, "title": "AML Survival Predictions"}, {"linkText": "Export to plot.ly", "showLink": true})
+
+        });
+      };
+    </script>
+  <!-- document.getElementById("graph3").innerHTML = "Solar Intensity Graph"; -->
+	<!-- Load Booststrap -->
+	<script type="text/javascript" src="http://www.matthewtheisen.com/js/bootstrap.js"></script>
+	<script type="text/javascript" src="http://www.matthewtheisen.com/js/smooth-scroll.js"></script>
+  <script>submit()</script>
+</body>
+</html>

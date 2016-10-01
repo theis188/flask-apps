@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sun calculator</title>
+  </head>
+
+  <body>
+    <h1>Solar Calculator</h1>
+
+    <p id="results">Input a zipcode to get current Azimuth, Elevation. </p>
+    
+    <label>
+      <input type="text" id="userInput"> give me input
+    </label>
+    <button onclick="submit()">Submit</button>
+
+    <script type="text/javascript" src="solcalcfuncs.js"></script>
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
+    <script>
+      var locations = {};
+  
+      function unquote(arg) {
+        return arg.replace(/^"|"$/g, "");
+      }
+
+      function processData(allText) {
+        var allTextLines = allText.split(/\r\n|\n/);
+        var headers = allTextLines[0].split(',');
+
+        for (var i = 1; i < allTextLines.length; i++) {
+          var data = allTextLines[i].split(',');
+
+          if (data.length === headers.length) {
+            locations[unquote(data[0])] = {
+              lat: parseFloat(unquote(data[3])),
+              lng: parseFloat(unquote(data[4])),
+              tz: parseFloat(unquote(data[5]))
+            };
+          }
+        }
+      }
+
+      function JDCalc() {
+        var d = new Date();
+        var docyear = d.getFullYear();
+        var docmonth = d.getMonth();
+        var docday = d.getDate();
+        
+        if (docmonth <= 2) {
+          docyear -= 1;
+          docmonth += 12;
+        }
+        
+        var A = Math.floor(docyear/100);
+        var B = 2 - A + Math.floor(A/4);
+        var JD = Math.floor(365.25*(docyear + 4716)) + Math.floor(30.6001*(docmonth + 2)) + docday + B - 1524.5;
+        return JD;
+      }
+
+      function calcLocalTime()  {
+        var d = new Date();
+        var dochr = d.getHours();
+        var docmn = d.getMinutes();
+        var docsc = d.getSeconds();
+        var mins = dochr * 60 + docmn + docsc / 60.0;
+        return mins;
+      }
+
+      function submit() {
+        var userInput = document.getElementById("userInput").value;
+        var loc = locations[userInput];
+
+        var jday = JDCalc();
+        var tl = calcLocalTime();
+        var total = jday + tl/1440.0 + loc.tz/24.0;
+        var T = calcTimeJulianCent(total);
+        var AzElArray = calcAzElCustom(T, tl, loc.lat, loc.lng, loc.tz);
+        document.getElementById("results").innerHTML = AzElArray; 
+      }
+
+      $.ajax({type: 'GET', url: 'zipcode.csv', async: true})
+        .fail(function() { alert( "error" ); })
+        .success(processData);
+    </script>
+  </body>
+</html>
+

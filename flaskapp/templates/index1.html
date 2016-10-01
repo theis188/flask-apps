@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--
+ * A Design by GraphBerry
+ * Author: GraphBerry
+ * Author URL: http://graphberry.com
+ * License: http://graphberry.com/pages/license
+-->
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun calculator</title>
+      <style>
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+  </style>
+
+  <style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-yw4l{vertical-align:top}
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+
+	<!-- Load fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+
+	<!-- Load css styles -->
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/font-awesome.css" />
+	<link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/style.css" />
+
+</head>
+
+
+<body>
+	<div class="jumbotron home home-fullscreen" id="home">
+		<div class="container">
+			<div class="header-info">
+				<h1>Sun Calculator</h1>
+				<p>Get solar elevation, cloud cover and estimated solar intensity<br> using only your continental US zip code.
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-- Services section start -->
+
+<div class="container" data-html="true">
+  <div class="row">
+     <div class="col-md-12"><p><h2>Calculator will extract latitude and longitude from zip code and merge with sun position and cloud forecast data to predict solar intensity.</h2></p></div>
+  </div>
+  <div class="row">
+      <br><p><label>
+      Continental US zip code input: <input type="text" id="userInput"> 
+      </label>
+      <button onclick="submit()">Submit</button>
+      </p>
+          <p id="Description">Solar intensity (max = 1050) can be mulitplied by a solar panel efficiency for power output.</p> <p> This python web application is powered by <a href="http://flask.pocoo.org">Flask</a>. Sky cover forecast data from the <a href="http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/DC.ndfd/AR.conus/VP.001-003/">NDFD</a> is updated hourly. GRIB decoding is handled by the <a href = "https://software.ecmwf.int/wiki/display/GRIB/Home">GRIB API</a> using the python interface <a href="http://jswhit.github.io/pygrib/docs/index.html"> pygrib</a>. Graph generated with <a href="http://d3js.org">D3.js</a> </p>
+  </div>
+  <div class="row"><p id="graph1">Graphs will appear here.</p></div>
+  <div class="row" id="area1"></div>
+  <div class="row"><p id="graph2"></p></div>
+  <div class="row" id="area2"></div>
+  <div class="row"><p id="graph3"></p></div>
+  <div class="row" id="area3"></div>
+</div>
+
+<br>
+
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/solcalcfuncs.js"></script>
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="http://www.matthewtheisen.com/static/LineGraphingFunctions.js"></script>
+
+    <script>
+      var elevationArray = [];
+      var locations = {};
+  
+      function unquote(arg) {
+        return arg.replace(/^"|"$/g, "");
+      }
+
+      function processData(allText) {
+        var allTextLines = allText.split(/\r\n|\n/);
+        var headers = allTextLines[0].split(',');
+
+        for (var i = 1; i < allTextLines.length; i++) {
+          var data = allTextLines[i].split(',');
+
+          if (data.length === headers.length) {
+            locations[unquote(data[0])] = {
+              lat: parseFloat(unquote(data[3])),
+              lng: parseFloat(unquote(data[4])),
+              tz: parseFloat(unquote(data[5]))
+            };
+          }
+        }
+      }
+
+      function JDCalc() {
+        var d = new Date();
+        var docyear = d.getFullYear();
+        var docmonth = d.getMonth();
+        var docday = d.getDate();
+                
+        if (docmonth <= 2) {
+          docyear -= 1;
+          docmonth += 12;
+        }
+        
+        var A = Math.floor(docyear/100);
+        var B = 2 - A + Math.floor(A/4);
+        var JD = Math.floor(365.25*(docyear + 4716)) + Math.floor(30.6001*(docmonth + 2)) + docday + B - 1524.5;
+        return JD;
+      }
+
+      function calcLocalTime()  {
+        var d = new Date();
+        var dochr = d.getHours();
+        var docmn = d.getMinutes();
+        var docsc = d.getSeconds();
+        var mins = dochr * 60 + docmn + docsc / 60.0;
+        return mins;
+      }
+      function TZCalc() {
+        d = new Date();
+        var doctz = -d.getTimezoneOffset()/60;
+        return doctz
+      }
+
+      function submit() {
+        var userInput = document.getElementById("userInput").value;
+        var loc = locations[userInput];
+        var jday = JDCalc();
+        var doctz = TZCalc();
+        var tl = calcLocalTime();
+        var total = jday + tl/1440.0 + loc.tz/24.0;
+        var T = calcTimeJulianCent(total);
+        var AzElArray = calcAzElCustom(T, tl, loc.lat, loc.lng, doctz);
+        var elevationArray = [];
+        for (i = 1; i < 25; i++) {
+          var tempT = calcTimeJulianCent(total + i/24.0);
+          var AzElTemp = calcAzElCustom(tempT, tl + i*60, loc.lat, loc.lng, doctz);
+          elevationArray.push(Math.max(AzElTemp[1],0));
+        }
+        
+        $.getJSON('/appy/_get_clouds', {
+          lat: Math.round(loc.lat * 100),
+          lon: Math.round(loc.lng * 100)
+        }, function(data) {
+          // document.getElementById("results2").innerHTML = data;
+          var SolarIntensity = [];
+          var AngleIntensity = [];
+          var BaseIntensity = 1050;
+          var minInt = 0.20;
+          var maxInt = 1.00;
+          for (i = 0; i < 24; i++) {
+            var Intens = minInt + (maxInt - minInt)*(100 - data[i])/100.00;
+            var AngleIntens = BaseIntensity * Math.sin(degToRad(elevationArray[i]));
+            AngleIntensity.push(Math.round(AngleIntens))
+            SolarIntensity.push(Math.round(AngleIntens * Intens));
+          var row = i+1
+          }
+          document.getElementById("graph1").innerHTML = "Solar Elevation Graph";
+          document.getElementById("graph2").innerHTML = "Cloud Cover Graph";
+          document.getElementById("graph3").innerHTML = "Solar Intensity Graph";
+          graph1(elevationArray,"#area1","black","Solar Elevation (deg)")
+          graph1(data,"#area2","gray","Cloud Cover (%)")
+          graph1(SolarIntensity,"#area3","orange","Solar Intensity (W/m2)")
+        });
+		document.getElementById("graph1").innerHTML = "Request submitted, data extracting, please allow 20 seconds...";
+    document.getElementById("graph2").innerHTML = "Request submitted, data extracting, please allow 20 seconds...";
+    document.getElementById("graph3").innerHTML = "Request submitted, data extracting, please allow 20 seconds...";
+      }
+
+      $.ajax({type: 'GET', url: "{{ url_for('static', filename='zipcode.csv') }}", async: true})
+        .fail(function() { alert( "error" ); })
+        .success(processData);
+    </script>
+
+	<!-- Load Booststrap -->
+	<script type="text/javascript" src="http://www.matthewtheisen.com/js/bootstrap.js"></script>
+	<script type="text/javascript" src="http://www.matthewtheisen.com/js/smooth-scroll.js"></script>
+</body>
+</html>
