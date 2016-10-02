@@ -8,6 +8,7 @@ from sklearn import linear_model
 from DBFun import survRegress
 import psycopg2
 import urlparse
+from getscores import getrank
 
 
 # Initialize the Flask application
@@ -33,6 +34,9 @@ def bindex():
 def cindex():
     return render_template('indexcancerwgraph.html')
 
+@app.route('/_Los_Angeles')
+def dindex():
+    return render_template('Page2.html')
 
 # Route that will process the AJAX request, sum up two
 # integer numbers (defaulted to zero) and return the
@@ -58,6 +62,13 @@ def get_predictions():
   colNames = colNames.getlist('colnames[]')
   resulting = survRegress(colNames)
   resulting[1]=resulting[1].tolist()
+  return json.dumps(resulting)
+
+@app.route('/_neighb_rank')
+def neighb_rank():
+  colNames = request.args
+  colNames = colNames.getlist('colnames[]')
+  resulting = getrank(colNames)
   return json.dumps(resulting)
 
 if __name__ == "__main__":

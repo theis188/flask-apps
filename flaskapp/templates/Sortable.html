@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Sortable - Connect lists</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/bootstrap.css" />
+  <style>
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+  font-size: 1em;
+}
+
+.ui-draggable, .ui-droppable {
+  background-position: top;
+}
+
+  #sortable1, #sortable2 {
+    border: 1px solid #eee;
+    width: 240px;
+    min-height: 20px;
+    list-style-type: none;
+    padding: 5px 0 0 0;
+    margin-left:auto;
+    margin-right:auto;
+    display: center;
+  }
+  #sortable1 li, #sortable2 li {
+    border: 1px solid #eee;
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+    width: 228px;
+    display: center;
+  }
+
+.centerBlock {
+  display: table;
+  margin: 0 auto;
+}
+
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#sortable1, #sortable2" ).sortable({
+      connectWith: ".connectedSortable"
+    }).disableSelection();
+  } );
+  </script>
+</head>
+<body>
+            
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    
+    <div class="col-sm-5">
+    <div class="text-center">
+      <p><h1>Features</h1></p>
+   <ul id="sortable1" class="connectedSortable">
+    <li class="ui-state-default" id="prop-crime">Property Crime</li>
+    <li class="ui-state-default" id="viol-crime">Violent Crime</li>
+    <li class="ui-state-default" id="air-qual">Air Quality</li>
+    <li class="ui-state-default" id="school-qual">School Quality</li>
+    <li class="ui-state-default" id="pop-dens-h">Population Density (Hi)</li> 
+    <li class="ui-state-default" id="pop-dens-l">Population Density (Lo)</li> 
+    <li class="ui-state-default" id="rest-dens">Restaurant Density</li>
+    <li class="ui-state-default" id="buy-price">Price to Buy</li> 
+    <li class="ui-state-default" id="walk-score">Walkability</li>
+  </ul>
+
+    </div>
+    </div>
+
+    <div class="col-sm-5">
+    <div class="text-center">
+      <p><h1>Rank</h1></p>
+    <ul id="sortable2" class="connectedSortable">
+    </ul>
+
+    </div>
+    </div>
+    
+    <div class="col-sm-1"></div>
+</div>
+
+<br> <br>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="centerBlock">
+      <button onclick="submit()" type="button">Submit</button>
+      <img class="img-responsive" src="help.png"> </img>
+    </div>
+  </div>
+</div>
+
+<script>
+function submit() {
+
+var ul = document.getElementById("sortable2");
+var items = ul.getElementsByTagName("li");
+var tosend = []
+for (var i = 0; i < items.length; ++i) {
+  tosend.push(items[i].id)
+  }
+console.log(tosend)
+
+  $.getJSON('/appy/_neighb_rank', {
+          colnames: tosend
+        }, function(data) {
+//
+}
+</script>
+
+ 
+</body>
+</html>
