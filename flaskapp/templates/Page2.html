@@ -12,7 +12,7 @@
     <title>Matthew Theisen | Data science and beyond</title>
       <style>
  #mapid { 
-height: 800px;
+height: 600px;
 width: "100%";
 position: relative;
 }
@@ -75,7 +75,10 @@ table {
     width: 228px;
     display: center;
   }
-
+  #pressable {
+    margin:auto;
+  display:block;
+}
 .centerBlock {
   display: table;
   margin: 0 auto;
@@ -189,25 +192,39 @@ geojson=L.geoJson(neighbData, {style: style,
 
 
 function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
+    
+    return d > 90 ? '#007913' :
+           d > 80 ? '#01980D' :
+           d > 70 ? '#53A700' :
+           d > 60  ? '#82AF00' :
+           d > 50  ? '#C8E700' :
+           d > 40  ? '#E7D200' :
+           d > 30   ? '#FD8D3C' :
+           d > 20   ? '#E79000' :
+           d > 10   ? '#E76D00' :
+                      '#CE3B00';
 }
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.rank),
+        fillColor: getColor(70),
         weight: 2,
         opacity: 1,
         color: 'gray',
-        fillOpacity: 0.4
+        fillOpacity: 0.25
     };
 }
+
+function style2(feature) {
+    return {
+        fillColor: getColor(ranker[feature.properties.name]),
+        weight: 2,
+        opacity: 1,
+        color: 'gray',
+        fillOpacity: 0.25
+    };
+}
+
 
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
@@ -260,6 +277,13 @@ return s
 info.addTo(mymap);
 
 </script>
+<br>
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-5">
+  <button id="pressable" onclick="submit()" type="button">Submit</button></div>
+  <div class="col-sm-7"></div>
+</div>
 
 <div class="row">
     <div class="col-sm-1"></div>
@@ -275,10 +299,11 @@ info.addTo(mymap);
     <li class="ui-state-default" id="pop-dens-h">Population Density (Hi)</li> 
     <li class="ui-state-default" id="pop-dens-l">Population Density (Lo)</li> 
     <li class="ui-state-default" id="rest-dens">Restaurant Density</li>
-    <li class="ui-state-default" id="buy-price">Price to Buy</li> 
+    <li class="ui-state-default" id="buy-price">Price to Buy</li>
+    <li class="ui-state-default" id="rent-price">Price to Rent (2B)</li> 
     <li class="ui-state-default" id="walk-score">Walkability</li>
   </ul>
-
+  <button id="pressable" onclick="submit()" type="button">Submit</button>
     </div>
     </div>
 
@@ -309,6 +334,9 @@ console.log(tosend)
   for (i=0;i<data.length;i++) {
     ranker[ neighborder[i] ] = data[i]
     }
+  geojson=L.geoJson(neighbData, {style: style2,
+  onEachFeature: onEachFeature
+  }).addTo(mymap);
   }
 )
 }
@@ -317,7 +345,6 @@ console.log(tosend)
 <div class="row">
   <div class="col-sm-12">
     <div class="centerBlock">
-      <button onclick="submit()" type="button">Submit</button>
       <img class="img-responsive" src="http://www.matthewtheisen.com/img/help.png"> </img>
     </div>
   </div>
