@@ -74,6 +74,7 @@ table {
     font-size: 1.2em;
     width: 228px;
     display: center;
+    background-color: #EDEDED;
   }
   #pressable {
     margin:auto;
@@ -135,11 +136,11 @@ table, th, td {
 	<!-- Services section start -->
 
 <div class="container" data-html="true">
-    <div class="row">
-      <div class="col-md-12"><p>This will be a map</p></div>
+  <div class="row">
+    <div class="col-md-12"><p><h2>Neighborhood Ranker</h2></p></div>
   </div>
   <div class="row">
-     <div class="col-md-12"><p><h2>Map</h2></p></div>
+     <div class="col-md-12"><p>The neighborhood ranker will rank neighborhoods according to your chosen criteria. Select your criteria by dragging the feature boxes into the rank column and clicking Submit. Make sure to rank-order your features in the order of importance.</p></div>
   </div>
   <div class="row">
       <div id = "mapid" class="col-sm-12"><p>
@@ -346,6 +347,17 @@ console.log(tosend)
   <div class="col-sm-12">
     <div class="centerBlock">
       <img class="img-responsive" src="http://www.matthewtheisen.com/img/help.png"> </img>
+    </div>
+  </div>
+</div>
+
+<br><br>
+
+<div class="container" data-html="true">
+  <div class="row">
+    <div class="col-md-12"><p>Data for this project comes from the <a href="http://www.mappingla.com">LA Times</a>, <a href="http://www.yelp.com">Yelp</a>, <a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a>, <a href ="http://www.zillow.com/howto/api/APIOverview.htm">Zillow</a>, <a href = "http://www.greatschools.org/">GreatSchools</a>, <a href="http://www.rent.com">Rent.com</a>, <a href="http://www.padmapper.com">Padmapper</a>, <a href="https://www.neighborhoodscout.com">NeighborhoodScout</a>, <a href="http://www.walkscore.com">Walkscore</a> and <a href="http://www3.aqmd.gov/webappl/gisaqi2/VEMap3D.aspx">SCAQMD</a>. </p>
+
+    <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated server-side via <a href="http://flask.pocoo.org/">Python Flask</a> web framework.
     </div>
   </div>
 </div>
