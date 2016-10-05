@@ -71,7 +71,7 @@ table, th, td {
       </label>
       <button onclick="submit()">Submit</button>
       </p>
-          <p id="Description">Solar intensity (max = 1050) can be mulitplied by a solar panel efficiency for power output.</p> <p> This python web application is powered by <a href="http://flask.pocoo.org">Flask</a>. Sky cover forecast data from the <a href="http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/DC.ndfd/AR.conus/VP.001-003/">NDFD</a> is updated hourly. GRIB decoding is handled by the <a href = "https://software.ecmwf.int/wiki/display/GRIB/Home">GRIB API</a> using the python interface <a href="http://jswhit.github.io/pygrib/docs/index.html"> pygrib</a>. Graph generated with <a href="http://d3js.org">D3.js</a> </p>
+          <p id="Description">Solar intensity (max = 1050) can be mulitplied by a solar panel efficiency for power output.</p> <p> This python web application is powered by <a href="http://flask.pocoo.org">Flask</a>. Sky cover forecast data from the <a href="http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/DC.ndfd/AR.conus/VP.001-003/">NDFD</a> is updated hourly (see <a href="#note">note</a>). GRIB decoding is handled by the <a href = "https://software.ecmwf.int/wiki/display/GRIB/Home">GRIB API</a> using the python interface <a href="http://jswhit.github.io/pygrib/docs/index.html"> pygrib</a>. Graph generated with <a href="http://d3js.org">D3.js</a> </p>
   </div>
   <div class="row"><p id="graph1">Graphs will appear here.</p></div>
   <div class="row" id="area1"></div>
@@ -79,6 +79,10 @@ table, th, td {
   <div class="row" id="area2"></div>
   <div class="row"><p id="graph3"></p></div>
   <div class="row" id="area3"></div>
+
+<div class="row">
+	<p id="note"><b>Note</b>: The NDFD website has been intermittently unresponsive so this application is currently using a static forecast which is no longer updated hourly.</p>
+</div>
 </div>
 
 <br>

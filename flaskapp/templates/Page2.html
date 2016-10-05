@@ -335,7 +335,8 @@ console.log(tosend)
   for (i=0;i<data.length;i++) {
     ranker[ neighborder[i] ] = data[i]
     }
-  geojson=L.geoJson(neighbData, {style: style2,
+  geojson.clearLayers();
+  geojson = L.geoJson(neighbData, {style: style2,
   onEachFeature: onEachFeature
   }).addTo(mymap);
   }
