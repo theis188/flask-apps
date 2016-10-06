@@ -58,7 +58,7 @@ table {
 }
 
   #sortable1, #sortable2 {
-    border: 1px solid #eee;
+    border: 3px solid #737373;
     width: 240px;
     min-height: 20px;
     list-style-type: none;
@@ -114,10 +114,15 @@ table, th, td {
   <script>
   $( function() {
     $( "#sortable1, #sortable2" ).sortable({
-      connectWith: ".connectedSortable"
-    }).disableSelection();
-  } );
-  </script>
+      connectWith: ".connectedSortable",
+      stop: function (event,ui) {submit()}
+    })
+  });
+
+var ranker =2;
+var scorer =2;
+
+</script>
 
 
 </head>
@@ -135,6 +140,9 @@ table, th, td {
 	</div>
 	<!-- Services section start -->
 
+
+
+
 <div class="container" data-html="true">
   <div class="row">
     <div class="col-md-12"><p><h2>Neighborhood Ranker</h2></p></div>
@@ -143,10 +151,32 @@ table, th, td {
      <div class="col-md-12"><p>The neighborhood ranker will rank neighborhoods according to your chosen criteria. Select your criteria by dragging the feature boxes into the rank column and clicking Submit. Make sure to rank-order your features in the order of importance.</p></div>
   </div>
   <div class="row">
-      <div id = "mapid" class="col-sm-12"><p>
-      </p></div>
+      <div id = "mapid" class="col-sm-8"><p></p></div>
+      <div class="col-sm-4"> 
+        <div class="text-center">
+          <p><h1>Features</h1></p>
+          <ul id="sortable1" class="connectedSortable">
+            <li class="ui-state-default" name="prop-crime">Property Crime</li>
+            <li class="ui-state-default" name="viol-crime">Violent Crime</li>
+            <li class="ui-state-default" name="air-qual">Air Quality</li>
+            <li class="ui-state-default" name="school-qual">School Quality</li>
+            <li class="ui-state-default" name="pop-dens-h">Population Density (Hi)</li> 
+            <li class="ui-state-default" name="pop-dens-l">Population Density (Lo)</li> 
+            <li class="ui-state-default" name="rest-dens">Restaurant Density</li>
+            <li class="ui-state-default" name="buy-price">Price to Buy</li>
+            <li class="ui-state-default" name="rent-price">Price to Rent (2B)</li> 
+            <li class="ui-state-default" name="walk-score">Walkability</li>
+          </ul>
+        <p><h1>Rank</h1></p>
+        <ul id="sortable2" class="connectedSortable"> </ul>
+      </div>
+    </div>
   </div>
 </div>
+
+<br>
+
+<br>
 
 <script>
 var mymap = L.map('mapid').setView([34, -118.5], 11);
@@ -218,7 +248,7 @@ function style(feature) {
 
 function style2(feature) {
     return {
-        fillColor: getColor(ranker[feature.properties.name]),
+        fillColor: getColor(100-ranker[feature.properties.name]/1.55),
         weight: 2,
         opacity: 1,
         color: 'gray',
@@ -248,21 +278,24 @@ info.update = function (props) {
 
 function getcol() {
 
-var ul = document.getElementById("sortable2");
-var items = ul.getElementsByTagName("li");
-var tosend = []
-for (var i = 0; i < items.length; ++i) {
-  tosend.push(items[i].id)
-  }
-return tosend
+  var ul = document.getElementById("sortable2");
+  var items = ul.getElementsByTagName("li");
+  var tosend = []
+  for (var i = 0; i < items.length; ++i) {
+    tosend.push(items[i].getAttribute("name") )
+    }
+  return tosend
 }
 
 function getstr(namey) {
   s = ''
   var tosend = getcol()
-  if (window.ranker) {
+  if (ranker!=2) {
     s = s.concat('<b>Rank: </b>')
     s = s.concat(ranker[namey])
+    s = s.concat('<br/>')
+    s = s.concat('<b>Score: </b>')
+    s = s.concat(scorer[namey])
     s = s.concat('<br/>')
     for (i=0;i<tosend.length;i++) {
       s = s.concat('<b>')
@@ -278,51 +311,14 @@ return s
 info.addTo(mymap);
 
 </script>
-<br>
-<div class="row">
-  <div class="col-sm-1"></div>
-  <div class="col-sm-5">
-  <button id="pressable" onclick="submit()" type="button">Submit</button></div>
-  <div class="col-sm-7"></div>
-</div>
-
-<div class="row">
-    <div class="col-sm-1"></div>
-    
-    <div class="col-sm-5">
-    <div class="text-center">
-      <p><h1>Features</h1></p>
-   <ul id="sortable1" class="connectedSortable">
-    <li class="ui-state-default" id="prop-crime">Property Crime</li>
-    <li class="ui-state-default" id="viol-crime">Violent Crime</li>
-    <li class="ui-state-default" id="air-qual">Air Quality</li>
-    <li class="ui-state-default" id="school-qual">School Quality</li>
-    <li class="ui-state-default" id="pop-dens-h">Population Density (Hi)</li> 
-    <li class="ui-state-default" id="pop-dens-l">Population Density (Lo)</li> 
-    <li class="ui-state-default" id="rest-dens">Restaurant Density</li>
-    <li class="ui-state-default" id="buy-price">Price to Buy</li>
-    <li class="ui-state-default" id="rent-price">Price to Rent (2B)</li> 
-    <li class="ui-state-default" id="walk-score">Walkability</li>
-  </ul>
-  <button id="pressable" onclick="submit()" type="button">Submit</button>
-    </div>
-    </div>
-
-    <div class="col-sm-5">
-    <div class="text-center">
-      <p><h1>Rank</h1></p>
-    <ul id="sortable2" class="connectedSortable">
-    </ul>
-
-    </div>
-    </div>
-    
-    <div class="col-sm-1"></div>
-</div>
-
-<br> <br>
 
 <script>
+function getranks(arr) {
+  var sorted = arr.slice().sort(function(a,b){return b-a})
+  var ranks = arr.slice().map(function(v){ return sorted.indexOf(v)+1 });
+  return ranks
+};
+
 function submit() {
 var tosend = getcol()
 
@@ -331,10 +327,15 @@ console.log(tosend)
   $.getJSON('/appy/_neighb_rank', {
           colnames: tosend
         }, function(data) {
+  scorer = {}
   ranker = {}
+  ranks = getranks(data)
+
   for (i=0;i<data.length;i++) {
-    ranker[ neighborder[i] ] = data[i]
+    scorer[ neighborder[i] ] = data[i]
+    ranker[ neighborder[i] ] = ranks[i]
     }
+
   geojson.clearLayers();
   geojson = L.geoJson(neighbData, {style: style2,
   onEachFeature: onEachFeature
@@ -358,8 +359,11 @@ console.log(tosend)
   <div class="row">
     <div class="col-md-12"><p>Data for this project comes from the <a href="http://www.mappingla.com">LA Times</a>, <a href="http://www.yelp.com">Yelp</a>, <a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a>, <a href ="http://www.zillow.com/howto/api/APIOverview.htm">Zillow</a>, <a href = "http://www.greatschools.org/">GreatSchools</a>, <a href="http://www.rent.com">Rent.com</a>, <a href="http://www.padmapper.com">Padmapper</a>, <a href="https://www.neighborhoodscout.com">NeighborhoodScout</a>, <a href="http://www.walkscore.com">Walkscore</a> and <a href="http://www3.aqmd.gov/webappl/gisaqi2/VEMap3D.aspx">SCAQMD</a>. </p>
 
-    <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated server-side via <a href="http://flask.pocoo.org/">Python Flask</a> web framework.
+    <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated server-side via <a href="http://flask.pocoo.org/">Python Flask</a> web framework.</p>
+
+    <p>Learn more about the <a href="https://beyonddatascience.wordpress.com/2016/10/06/ranking-neighborhoods-in-los-angeles/">ranking algorithm</a>.</p>
     </div>
+
   </div>
 </div>
 
