@@ -49,9 +49,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-table {
-  font-size: 1em;
-}
 
 .ui-draggable, .ui-droppable {
   background-position: top;
@@ -84,6 +81,8 @@ table {
   display: table;
   margin: 0 auto;
 }
+
+
   </style>
 
   <style type="text/css">
@@ -123,6 +122,25 @@ var ranker =2;
 var scorer =2;
 
 </script>
+
+<style>
+th, td {
+    border-bottom: 1px solid #ddd;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    padding: 5px;
+}
+
+table {
+  font-size: 1em;
+  border: none;
+  display: center;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2}
+
+</style>
 
 
 </head>
@@ -188,15 +206,24 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mtheisen/citei76iz005f2jpac8g7ilcl
 }).addTo(mymap);
 var geojson;
 // ... our listeners
- function highlightFeature(e) {
-    var layer = e.target;
-
-    layer.setStyle({
+ highlightStyle = {
         weight: 5,
         color: '#666',
         dashArray: '',
         fillOpacity: 0.7
-    });
+    }
+
+  normalStyle = {
+        weight: 2,
+        opacity: 1,
+        color: 'gray',
+        fillOpacity: 0.25
+}
+
+ function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle(highlightStyle);
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
@@ -293,9 +320,11 @@ function getstr(namey) {
   if (ranker!=2) {
     s = s.concat('<b>Rank: </b>')
     s = s.concat(ranker[namey])
+    s = s.concat(' of 155')
     s = s.concat('<br/>')
     s = s.concat('<b>Score: </b>')
     s = s.concat(scorer[namey])
+    s = s.concat(' out of 100')
     s = s.concat('<br/>')
     for (i=0;i<tosend.length;i++) {
       s = s.concat('<b>')
@@ -319,6 +348,46 @@ function getranks(arr) {
   return ranks
 };
 
+function firsttenranks(rankarr) {
+  var sorted = rankarr.slice().sort(function(a,b){return a-b})
+  return sorted.slice(0,10)
+}
+
+function mktbl(ranks) {
+  s = ''
+  s = s.concat(' <table> <tr> <th>Neighborhood</th> <th>Rank</th>  <th>Score</th> </tr>')
+  tenranks = firsttenranks(ranks)
+  for (i=0;i<10;i++) {
+    rank = tenranks[i]
+    neighbind = (i>0 ? (tenranks[i]==tenranks[i-1] ? ranks.indexOf(rank,prevind+1) : ranks.indexOf(rank) ) : ranks.indexOf(rank) )
+    prevind = neighbind
+    plug = neighborder[neighbind]
+    // s = s.concat('<tr onmouseover="highlight(neighborder['+neighbind+'])" onmouseout="reset(neighborder['+neighbind+'])" >  <td>')
+    s = s.concat('<tr>  <td>')
+    s = s.concat(neighbname[plug])
+    s = s.concat('</td>  <td>')
+    s = s.concat(rank)
+    s = s.concat('</td>  <td>')
+    s = s.concat(scorer[plug])
+    s = s.concat('</td> </tr>')
+  }
+  s=s.concat('</table>')
+  return s
+}
+
+var layarr = {}
+for (i=0;i<neighborder.length;i++) {
+  for (var prop in geojson['_layers']) {
+    if (!geojson['_layers'].hasOwnProperty(prop)) {
+        //The current property is not a direct property of p
+        continue;
+    }
+    if (geojson['_layers'][prop]["feature"]["properties"]["name"]==neighborder[i]) {
+      layarr[neighborder[i]] = geojson['_layers'][prop]
+    }
+  }
+}
+
 function submit() {
 var tosend = getcol()
 
@@ -340,18 +409,54 @@ console.log(tosend)
   geojson = L.geoJson(neighbData, {style: style2,
   onEachFeature: onEachFeature
   }).addTo(mymap);
-  }
-)
+  document.getElementById("tablerow").innerHTML = mktbl(ranks)
+  })
 }
+
+// function highlight(name) {
+  
+//   var laytouse = layarr[name]
+//   laytouse.setStyle(highlightStyle)
+//   info.update()
+// }
+
+// function reset(name) {
+//   var laytouse = layarr[name]
+//   laytouse.setStyle(normalStyle)
+// }
 </script>
 
+<div class="container" data-html="true">
 <div class="row">
+  <div id="tablerow" class="col-sm-12">
+  </div>
+</div>
+
+
+<div id="clickme" class="row">
+  <div class="col-sm-12">
+    <p><h4><u>Need help? Click here</u></h4></p>
+  </div>
+</div>
+
+<div id="help" class="row">
   <div class="col-sm-12">
     <div class="centerBlock">
       <img class="img-responsive" src="http://www.matthewtheisen.com/img/help.png"> </img>
     </div>
   </div>
 </div>
+</div>
+
+<script>
+$("#help").hide();
+
+$( "#clickme" ).click(function() {
+  $( "#help" ).slideToggle( "slow", function() {
+    // Animation complete.
+  });
+});
+</script>
 
 <br><br>
 
