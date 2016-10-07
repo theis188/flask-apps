@@ -225,9 +225,9 @@ var geojson;
 
     layer.setStyle(highlightStyle);
 
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
+    // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    //     layer.bringToFront();
+    // }
     info.update(layer.feature.properties);
 }
 
@@ -240,7 +240,6 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
     });
 }
 
@@ -379,7 +378,6 @@ var layarr = {}
 for (i=0;i<neighborder.length;i++) {
   for (var prop in geojson['_layers']) {
     if (!geojson['_layers'].hasOwnProperty(prop)) {
-        //The current property is not a direct property of p
         continue;
     }
     if (geojson['_layers'][prop]["feature"]["properties"]["name"]==neighborder[i]) {
@@ -413,17 +411,15 @@ console.log(tosend)
   })
 }
 
-// function highlight(name) {
-  
-//   var laytouse = layarr[name]
-//   laytouse.setStyle(highlightStyle)
-//   info.update()
-// }
+function highlight(name) {
+  var laytouse = layarr[name]
+  laytouse.setStyle(highlightStyle)
+}
 
-// function reset(name) {
-//   var laytouse = layarr[name]
-//   laytouse.setStyle(normalStyle)
-// }
+function reset(name) {
+  var laytouse = layarr[name]
+  laytouse.setStyle(normalStyle)
+}
 </script>
 
 <div class="container" data-html="true">
