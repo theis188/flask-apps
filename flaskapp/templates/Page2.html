@@ -169,8 +169,8 @@ tr:nth-child(even) {background-color: #f2f2f2}
      <div class="col-md-12"><p>The neighborhood ranker will rank neighborhoods according to your chosen criteria. Select your criteria by dragging the feature boxes into the rank column and clicking Submit. Make sure to rank-order your features in the order of importance.</p></div>
   </div>
   <div class="row">
-      <div id = "mapid" class="col-sm-8"><p></p></div>
-      <div class="col-sm-4"> 
+      <div id = "mapid" class="col-sm-9"><p></p></div>
+      <div class="col-sm-3"> 
         <div class="text-center">
           <p><h1>Features</h1></p>
           <ul id="sortable1" class="connectedSortable">
@@ -206,14 +206,14 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mtheisen/citei76iz005f2jpac8g7ilcl
 }).addTo(mymap);
 var geojson;
 // ... our listeners
- highlightStyle = {
+var highlightStyle = {
         weight: 5,
         color: '#666',
         dashArray: '',
         fillOpacity: 0.7
     }
 
-  normalStyle = {
+var normalStyle = {
         weight: 2,
         opacity: 1,
         color: 'gray',
@@ -225,9 +225,9 @@ var geojson;
 
     layer.setStyle(highlightStyle);
 
-    // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    //     layer.bringToFront();
-    // }
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
     info.update(layer.feature.properties);
 }
 
@@ -235,8 +235,10 @@ function resetHighlight(e) {
     geojson.resetStyle(e.target);
     info.update();
 }
-
+// var layarr={}
 function onEachFeature(feature, layer) {
+    // nId = parseInt(feature.id)
+    name = feature.properties.name
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -361,8 +363,8 @@ function mktbl(ranks) {
     neighbind = (i>0 ? (tenranks[i]==tenranks[i-1] ? ranks.indexOf(rank,prevind+1) : ranks.indexOf(rank) ) : ranks.indexOf(rank) )
     prevind = neighbind
     plug = neighborder[neighbind]
-    // s = s.concat('<tr onmouseover="highlight(neighborder['+neighbind+'])" onmouseout="reset(neighborder['+neighbind+'])" >  <td>')
-    s = s.concat('<tr>  <td>')
+    s = s.concat('<tr value="neighborder['+neighbind+'])">  <td>')
+    // s = s.concat('<tr>  <td>')
     s = s.concat(neighbname[plug])
     s = s.concat('</td>  <td>')
     s = s.concat(rank)
@@ -374,17 +376,16 @@ function mktbl(ranks) {
   return s
 }
 
-var layarr = {}
-for (i=0;i<neighborder.length;i++) {
-  for (var prop in geojson['_layers']) {
-    if (!geojson['_layers'].hasOwnProperty(prop)) {
-        continue;
-    }
-    if (geojson['_layers'][prop]["feature"]["properties"]["name"]==neighborder[i]) {
-      layarr[neighborder[i]] = geojson['_layers'][prop]
-    }
-  }
-}
+// function bindrows() {
+// $('#tablerow table tbody tr').on('mouseenter', function(e){
+//     plug = e.target.value;
+//     layer = layarr[plug]
+//     // layer = geojson.getLayer(hovered_id); //your feature id here
+//     layer.setStyle(highlightStyle);
+//   }).on('mouseout', function(e){
+//     geojson.resetStyle(layer);
+//   });
+// }
 
 function submit() {
 var tosend = getcol()
@@ -403,23 +404,25 @@ console.log(tosend)
     ranker[ neighborder[i] ] = ranks[i]
     }
 
-  geojson.clearLayers();
+  geojson.clearLayers()
   geojson = L.geoJson(neighbData, {style: style2,
   onEachFeature: onEachFeature
   }).addTo(mymap);
   document.getElementById("tablerow").innerHTML = mktbl(ranks)
   })
+  // bindrows()
 }
 
-function highlight(name) {
-  var laytouse = layarr[name]
-  laytouse.setStyle(highlightStyle)
-}
+// function highlight(name) {
+//   var nId = layarr[name]
+//   layer = geojson.getLayer(nId)
+//   layer.setStyle(highlightStyle)
+// }
 
-function reset(name) {
-  var laytouse = layarr[name]
-  laytouse.setStyle(normalStyle)
-}
+// function reset(name) {
+//   var laytouse = layarr[name]
+//   laytouse.setStyle(normalStyle)
+// }
 </script>
 
 <div class="container" data-html="true">
