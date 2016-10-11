@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matthew Theisen | Data science and beyond</title>
+    <title>LA Neighborhood Ranker | Data science and beyond</title>
       <style>
  #mapid { 
 height: 600px;
@@ -73,10 +73,7 @@ body {
     display: center;
     background-color: #EDEDED;
   }
-  #pressable {
-    margin:auto;
-  display:block;
-}
+
 .centerBlock {
   display: table;
   margin: 0 auto;
@@ -169,7 +166,7 @@ tr:nth-child(even) {background-color: #f2f2f2}
      <div class="col-md-12"><p>The neighborhood ranker will rank neighborhoods according to your chosen criteria. Select your criteria by dragging the feature boxes into the rank column and clicking Submit. Make sure to rank-order your features in the order of importance.</p></div>
   </div>
   <div class="row">
-      <div id = "mapid" class="col-sm-9"><p></p></div>
+      <div id = "mapid" class="col-sm-6"><p></p></div>
       <div class="col-sm-3"> 
         <div class="text-center">
           <p><h1>Features</h1></p>
@@ -189,6 +186,13 @@ tr:nth-child(even) {background-color: #f2f2f2}
         <ul id="sortable2" class="connectedSortable"> </ul>
       </div>
     </div>
+    <div class="row">
+      <div class="text-center">
+        <p><h2>Top Ranked</h2></p>
+      </div>
+      <div id="tablerow" class="col-sm-3"><p>To see top ranked, select features to rank by.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -197,7 +201,7 @@ tr:nth-child(even) {background-color: #f2f2f2}
 <br>
 
 <script>
-var mymap = L.map('mapid').setView([34, -118.5], 11);
+var mymap = L.map('mapid').setView([34, -118.5], 10);
 L.tileLayer('https://api.mapbox.com/styles/v1/mtheisen/citei76iz005f2jpac8g7ilcl/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibXRoZWlzZW4iLCJhIjoiY2l0ZWk0NTBoMDVmMDJ0bXlyNmxzZ3RnMyJ9.fErHtcHVcTsHCLMPN1ZcQg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
@@ -235,10 +239,10 @@ function resetHighlight(e) {
     geojson.resetStyle(e.target);
     info.update();
 }
-// var layarr={}
+
 function onEachFeature(feature, layer) {
-    // nId = parseInt(feature.id)
     name = feature.properties.name
+    layer._leaflet_id = name
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -299,7 +303,7 @@ info.onAdd = function (mymap) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Neighborhood Name</h4>' +  (props ?
+    this._div.innerHTML = '<h4>Neighborhood Data</h4>' +  (props ?
         '<b>' + neighbname[props.name] + '</b><br/>' + getstr(props.name)
         : 'Hover over a neighborhood');
 };
@@ -363,7 +367,7 @@ function mktbl(ranks) {
     neighbind = (i>0 ? (tenranks[i]==tenranks[i-1] ? ranks.indexOf(rank,prevind+1) : ranks.indexOf(rank) ) : ranks.indexOf(rank) )
     prevind = neighbind
     plug = neighborder[neighbind]
-    s = s.concat('<tr value="neighborder['+neighbind+'])">  <td>')
+    s = s.concat('<tr onmouseover="highlight(neighborder['+neighbind+'])" onmouseout="reset(neighborder['+neighbind+'])">  <td>')
     // s = s.concat('<tr>  <td>')
     s = s.concat(neighbname[plug])
     s = s.concat('</td>  <td>')
@@ -413,23 +417,23 @@ console.log(tosend)
   // bindrows()
 }
 
-// function highlight(name) {
-//   var nId = layarr[name]
-//   layer = geojson.getLayer(nId)
-//   layer.setStyle(highlightStyle)
-// }
+function highlight(name) {
+  layer = geojson.getLayer(name)
+  layer.setStyle(highlightStyle)
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
+  info.update(layer.feature.properties);
+}
 
-// function reset(name) {
-//   var laytouse = layarr[name]
-//   laytouse.setStyle(normalStyle)
-// }
+function reset(name) {
+  layer = geojson.getLayer(name)
+  geojson.resetStyle(layer)
+  info.update();
+}
 </script>
 
 <div class="container" data-html="true">
-<div class="row">
-  <div id="tablerow" class="col-sm-12">
-  </div>
-</div>
 
 
 <div id="clickme" class="row">
