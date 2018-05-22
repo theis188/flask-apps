@@ -11,6 +11,8 @@
       <link rel="stylesheet" type="text/css" href="http://www.matthewtheisen.com/css/style3.css" />
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
 
+      <script src="score_fn.js">
+      </script>
 <style>
 
 #mapid { 
@@ -85,12 +87,13 @@ tr:nth-child(even) {background-color: #f2f2f2}
 	<!-- Load fonts -->
   <script type="text/javascript" src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="http://www.matthewtheisen.com/js/LA.js"></script>
-  <script src="http://www.matthewtheisen.com/js/data.js"></script>
+  <script src="../js/LA.js"></script>
+  <script src="../js/data.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script type="text/javascript" src="http://www.matthewtheisen.com/js/bootstrap.js"></script>
-  <script type="text/javascript" src="http://www.matthewtheisen.com/js/smooth-scroll.js"></script>
+  <script type="text/javascript" src="../js/bootstrap.js"></script>
+  <script type="text/javascript" src="../js/smooth-scroll.js"></script>
+  <script type="text/javascript" src="score_fn.js"></script>  
 
   <script>
   
@@ -342,9 +345,7 @@ function submit() {
 
   console.log(tosend)
 
-  $.getJSON('/appy/_neighb_rank', {
-          colnames: tosend
-        }, function(data) {
+  data = getScores(tosend)
   scorer = {}
   ranker = {}
   ranks = getranks(data)
@@ -359,7 +360,6 @@ function submit() {
 
   document.getElementById("tablerow").innerHTML = mktbl(ranks)
   bindrows()
-  })
 }
 
 //add the infor box
@@ -405,7 +405,7 @@ $( "#clickme" ).click(function() {
   <div class="row">
     <div class="col-md-12"><p>Data for this project comes from the <a href="http://www.mappingla.com">LA Times</a>, <a href="http://www.yelp.com">Yelp</a>, <a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a>, <a href ="http://www.zillow.com/howto/api/APIOverview.htm">Zillow</a>, <a href = "http://www.greatschools.org/">GreatSchools</a>, <a href="http://www.rent.com">Rent.com</a>, <a href="http://www.padmapper.com">Padmapper</a>, <a href="https://www.neighborhoodscout.com">NeighborhoodScout</a>, <a href="http://www.walkscore.com">Walkscore</a> and <a href="http://www3.aqmd.gov/webappl/gisaqi2/VEMap3D.aspx">SCAQMD</a>. </p>
 
-    <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated server-side via <a href="http://flask.pocoo.org/">Python Flask</a> web framework.</p>
+    <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated with JavaScript.</p>
 
     <p>Learn more about the <a href="https://beyonddatascience.wordpress.com/2016/10/06/ranking-neighborhoods-in-los-angeles/">ranking algorithm</a>.</p>
     </div>
