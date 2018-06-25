@@ -403,7 +403,7 @@ $( "#clickme" ).click(function() {
 
 <div class="container" data-html="true">
   <div class="row">
-    <div class="col-md-12"><p>Data for this project comes from the <a href="http://www.mappingla.com">LA Times</a>, <a href="http://www.yelp.com">Yelp</a>, <a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a>, <a href ="http://www.zillow.com/howto/api/APIOverview.htm">Zillow</a>, <a href = "http://www.greatschools.org/">GreatSchools</a>, <a href="http://www.rent.com">Rent.com</a>, <a href="http://www.padmapper.com">Padmapper</a>, <a href="https://www.neighborhoodscout.com">NeighborhoodScout</a>, <a href="http://www.walkscore.com">Walkscore</a> and <a href="http://www3.aqmd.gov/webappl/gisaqi2/VEMap3D.aspx">SCAQMD</a>. </p>
+    <div class="col-md-12"><p>Data for this project comes from the <a href="http://www.mappingla.com">LA Times</a>, <a href="http://www.yelp.com">Yelp</a>, <a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a>, <a href ="http://www.zillow.com/howto/api/APIOverview.htm">Zillow</a>, <a href = "http://www.greatschools.org/">GreatSchools</a>, <a href="http://www.rent.com">Rent.com</a>, <a href="http://www.padmapper.com">Padmapper</a>, <a href="https://www.neighborhoodscout.com">NeighborhoodScout</a>, <a href="https://www.redfin.com/how-walk-score-works">Walkscore</a> and <a href="http://www3.aqmd.gov/webappl/gisaqi2/VEMap3D.aspx">SCAQMD</a>. </p>
 
     <p>Mapping is accomplished with <a href="http://www.leafletjs.com">leaflet.js</a> and <a href="http://www.mapbox.com">Mapbox</a>. Rank is calculated with JavaScript.</p>
 
